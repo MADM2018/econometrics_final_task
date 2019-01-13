@@ -1,12 +1,12 @@
 ---
-title: "Hoja 4"
+title: "Trabajo Final"
 author: "Reinier Mujica"
-date: "2 de diciembre de 2018"
+date: "13 de enero de 2019"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE, comment = NA)
 ```
 
 ### Inicialización
