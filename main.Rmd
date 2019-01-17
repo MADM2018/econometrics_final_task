@@ -286,6 +286,23 @@ kable(results)
 ```
 Como se puede observar en la tabla no hay mucha diferencia entre los errores de prueba obtenidos de estos enfoques.
 
+#### f)
+Para seleccionar el modelo que minimiza el error, como no hay mucha diferencia entre los errores anteriores, escogimos el último modelo analizado **MCO with Forward step wise**. En el análisis de este modelo se determinaron las variables significativas al 5%, son las que se usan a continuación.
+
+```{r}
+fit.final <- lm(lbwght ~ bwght + fmaps + lbw + vlbw, data = datos.train)
+
+lm.pred <- predict.regsubsets(fit.final, newdata = datos.test)
+error.new =  mean((datos.test[, "lbwght"] - lm.pred)^2)
+error.new
+```
+
+El modelo con sólo cuatro variables explicativas con un nivel de significación del 5% (**bwght, fmaps, lbw, vlbw**) y un error de `r error.mco`, es un poco mas preciso respecto al error del MCO: `r error.mco`.
+
+Los **p-valores** se muestran a continuación:
+```{r}
+summary(fit.final)[4]
+```
 
 #### g)
 Regresión de Ridge
@@ -609,8 +626,139 @@ El error de prueba obtenido es `r error.lassoelastic` y la cantidad de coeficien
 
 
 #### o)
+Ajusta un modelo Rigorous LASSO (RLASSO) sobre el conjunto de entrenamiento con el lambda elegido mediante la penalización dependiente de los datos
+
+```{r echo = F}
+library(biglasso)
+library(hdm)
+set.seed(100)
+
+# ajustamos los datos
+x = datos.train
+y = datos.train[, "lbwght"]
+x[, "lbwght"] <- NULL;
+
+
+lasso.reg.dep = rlasso(x = x, y = y, post=FALSE, X.dependent.lambda = TRUE) 
+
+sum.lasso.dep <- summary(lasso.reg.dep, all=FALSE)
+sum.lasso.dep
+yhat.lasso.dep.new = predict(lasso.reg.dep, newdata=datos.test) #out-of-sample prediction
+```
+
+Informa el error de prueba obtenido junto con el número de coeficientes estimados diferentes de cero.
+
+Total de variables = **20**
+Variables seleccionadas = **1**
+p-value = **0**
+
+```{r echo = F}
+error.rlasso.dep <- mean((yhat.lasso.dep.new - datos.test[, "lbwght"] )^2)
+error.rlasso.dep
+```
+El error de prueba de Rigorous Lasso con penalización dependiente de los datos es `r error.rlasso.dep`
+
+Con el lambda elegido mediante la penalización independiente de los datos
+
+```{r echo = F}
+set.seed(100)
+lasso.reg.ind = rlasso(x = x, y = y, post=FALSE) # use lasso, not-Post-lasso
+sum.lasso.ind <- summary(lasso.reg.ind, all=FALSE)
+sum.lasso.ind
+yhat.lasso.ind.new = predict(lasso.reg.ind, newdata=datos.test) #out-of-sample prediction
+
+```
+Informa el error de prueba obtenido junto con el número de coeficientes estimados diferentes de cero.
+
+Total de variables = **20**
+Variables seleccionadas = **1**
+p-value = **0**
+
+```{r echo = F}
+error.rlasso.ind <- mean((yhat.lasso.ind.new - datos.test[, "lbwght"] )^2)
+error.rlasso.ind
+```
+El error de prueba de Rigorous Lasso con penalización independiente de los datos es `r error.rlasso.ind`
+
+Calcula el error de prueba de los dos modelos mediante el ajuste de Post-LASSO.
+
+```{r echo = F}
+set.seed(100)
+post.lasso.reg = rlasso(x = x, y = y, post=TRUE) #now use post-lasso
+sum.post.lasso.reg <- summary(post.lasso.reg, all=FALSE)
+sum.post.lasso.reg
+print(post.lasso.reg, all=FALSE) # or use summary(post.lasso.reg, all=FALSE)
+yhat.postlasso.new = predict(post.lasso.reg, newdata=datos.test) #out-of-sample prediction
+
+```
+####Informa el error de prueba obtenido junto con el número de coeficientes estimados diferentes de cero.
+
+Total de variables = **20**
+Variables seleccionadas = **1**
+p-value = **0**
+
+```{r echo = F}
+error.postlasso <- mean((yhat.postlasso.new - datos.test[, "lbwght"] )^2)
+error.postlasso
+
+```
+El error de prueba Post-Lasso es `r error.postlasso`
+
+
+#### p)
+
+Contrastar la significación individual de los coeficientes estimados del modelo final. Utiliza el nivel de significación del 5%. 
+
+```{r echo = F}
+set.seed(100)
+lasso.effect = rlassoEffects(x = x, y = y)
+summary(lasso.effect)
+plot(lasso.effect)
+```
+Sólo las variables ***bwght, fmaps, lbw y vlbw** son significativas sobre un nivel de confianza del 1%
+
+####Eliminamos las variables no significativas
+
+```{r echo = F}
+x.nuevo.1 <- x[, -c(1:6,8,10:11,14:20)] 
+
+lasso.effect.1 = rlassoEffects(x = x.nuevo.1, y = y)
+summary(lasso.effect.1)
+
+```
+Las cuatro variables son muy significativas.
+
+Informa el error de prueba obtenido
+```{r echo = F}
+set.seed(100)
+lasso.reg.2 = rlasso(x = x.nuevo.1, y = y, post=FALSE)
+yhat.lasso.new.2 = predict(lasso.reg.2, newdata=datos.test) 
+error.rlasso.2 <- mean((yhat.lasso.new.2 - datos.test[, "lbwght"]  )^2)
+error.rlasso.2
+```
+El error de prueba obtenido es `r error.rlasso.2`
+
+Basándose en contrastes de significación individual, selecciona modelos que contengan sólo variables significativas al 5% de significación y estima el error de prueba de estos modelos (mediante el ajuste de Post-LASSO).
+
+```{r echo = F}
+set.seed(100)
+post.lasso.reg.2 = rlasso(x = x.nuevo.1, y = y, post=TRUE) 
+summary(post.lasso.reg.2, all=FALSE) 
+yhat.postlasso.new.2 = predict(post.lasso.reg.2, newdata=datos.test) 
+error.postlasso.2 <- mean((yhat.postlasso.new.2 - datos.test[, "lbwght"] )^2)
+error.postlasso.2
+
+```
+
+El error de prueba de estos modelos es `r error.postlasso.2`
+
+
+#### q)
 A continuación se muestran los modelos utilizados anteriormente con el tipo de validación cruzada y su error de prueba correspondiente.
 ```{r}
 kable(results2)
 ```
+
+r. Haz una tabla con los coeficientes estimados con sus p-valores del modelo con el mejor ajuste. Comenta tus
+resultados. Interpreta los coeficientes estimados del modelo con el mejor ajuste.
 
