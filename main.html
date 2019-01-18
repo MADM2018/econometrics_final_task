@@ -224,19 +224,12 @@ test.size = dim(datos.test)[1]</code></pre>
 <h4>a)</h4>
 <p>El conjunto de datos es bwght2 y contiene información sobre nacimientos. Estos datos han sido obtenidos de certificados de nacimiento y desfunción y también de información de natalidad y mortalidad del Centro Nacional de Estadística para la Salud. El dataset contiene varias variables con diversa información como: edad de los padres, educación de los padres, número de visitas prenatales, peso al nacer, e información acerca de la cantidad de cigarillos y bebida que consumia la madre durante el embarazo. También se incluye información del feto.</p>
 <p>Los nombres de las variables que contiene el dataset son:</p>
-<pre class="r"><code>names(bwght2)</code></pre>
 <pre><code> [1] &quot;mage&quot;    &quot;meduc&quot;   &quot;monpre&quot;  &quot;npvis&quot;   &quot;fage&quot;    &quot;feduc&quot;   &quot;bwght&quot;  
  [8] &quot;omaps&quot;   &quot;fmaps&quot;   &quot;cigs&quot;    &quot;drink&quot;   &quot;lbw&quot;     &quot;vlbw&quot;    &quot;male&quot;   
 [15] &quot;mwhte&quot;   &quot;mblck&quot;   &quot;moth&quot;    &quot;fwhte&quot;   &quot;fblck&quot;   &quot;foth&quot;    &quot;lbwght&quot; 
 [22] &quot;magesq&quot;  &quot;npvissq&quot;</code></pre>
 <p>La variable dependiente que va ha ser explicada es <strong>lbwght</strong>, que es el logaritmo de la variable <strong>bwght</strong> que es el peso al nacer.</p>
 <p>Vamos a ajustar un modelo de mínimos cuadrados ordinarios (con todas las variables explicativas) en el conjunto de entrenamiento e imprimir el error de prueba obtenido.</p>
-<pre class="r"><code>set.seed(100)
-lm.fit = lm(lbwght~., data=datos.train)
-lm.pred = predict(lm.fit, newdata = datos.test)
-
-error.mco &lt;- mean((datos.test[, &quot;lbwght&quot;] - lm.pred)^2)
-error.mco</code></pre>
 <pre><code>[1] 0.000518739</code></pre>
 <p>Creamos una tabla para guardar los resultados de todos los modelos</p>
 <pre class="r"><code>results &lt;- matrix(NA, nrow = 3, ncol = 3)
@@ -1610,6 +1603,7 @@ Joint significance test:
 </tr>
 </tbody>
 </table>
+<p>Como sucede en el inciso <strong>f</strong> no hay mucha diferencia en el error de prueba de los modelos analizados. Sin embargo el modelo <strong>LASSO</strong> presenta un menor error que los modelos analizados en el inciso <strong>f</strong>.</p>
 </div>
 </div>
 

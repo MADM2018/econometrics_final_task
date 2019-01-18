@@ -1,12 +1,11 @@
 rm(list=ls())
 cat("\014")
-
 library(knitr)
 library(wooldridge)
 attach(bwght2)
+set.seed(100)
 
 datos = na.omit(bwght2)
-
 train.size = round(dim(datos)[1] * 0.7)
 train = sample(1:dim(datos)[1], train.size)
 test = -train
@@ -14,6 +13,7 @@ datos.train = datos[train, ]
 datos.test = datos[test, ]
 test.size = dim(datos.test)[1]
 
+names(bwght2)
 
 set.seed(100)
 lm.fit = lm(lbwght~., data=datos.train)
@@ -28,6 +28,7 @@ rownames(results) <- c("MCO","MCO with Subset Selection","MCO with Forward step 
 results <- as.table(results)
 
 results["MCO", "None"] = error.mco
+
 
 summary(lm.fit)
 lm.fit$coefficients
@@ -199,12 +200,20 @@ lm.pred = predict.regsubsets(regfit.full, newdata = datos.test, id=which.min(rms
 error.mss <- mean((datos.test[, "lbwght"] - lm.pred)^2)
 error.mss 
 
+results["MCO with Forward step wise", "5 Cross Validation"] = error.mss
 
-kable(results)
 
-results2 <- matrix(NA, nrow = 5, ncol = 2)
-colnames(results2) <- c("5 Cross Validation","10 Cross Validation")
-rownames(results2) <- c("RIDGE","LASSO","PCA", "PLS", "LASSO with Elastic Net")
+fit.final <- lm(lbwght ~ bwght + fmaps + lbw + vlbw, data = datos.train)
+
+lm.pred <- predict.regsubsets(fit.final, newdata = datos.test)
+error.new =  mean((datos.test[, "lbwght"] - lm.pred)^2)
+error.new
+
+summary(fit.final)[4]
+
+results2 <- matrix(NA, nrow = 8, ncol = 3)
+colnames(results2) <- c("None","5 Cross Validation","10 Cross Validation")
+rownames(results2) <- c("RIDGE","LASSO","PCA", "PLS", "LASSO with Elastic Net", "Rigorous LASSO Independent L", "Rigorous LASSO Dependent L", "Rigorous LASSO Post-Lasso")
 results2 <- as.table(results2)
 
 set.seed(100)
@@ -256,6 +265,7 @@ lasso.pred.2=predict(lasso.mod,s=lambda.codo.l,newx=x[test ,])
 error.lasso.2 <- mean((lasso.pred.2-datos.test[, "lbwght"] )^2)
 error.lasso.2
 
+
 c = coef(lasso.mod, s = bestlam)
 c
 
@@ -278,6 +288,7 @@ error.ridge
 
 results2["RIDGE", "5 Cross Validation"] = error.ridge
 
+
 set.seed(100)
 cv.lasso=cv.glmnet(x[train ,],y[train],alpha=1, lambda = grid, nfolds = 5)
 plot(cv.lasso)
@@ -292,6 +303,7 @@ error.lasso <- mean((lasso.pred-datos.test[, "lbwght"] )^2)
 error.lasso
 
 results2["LASSO", "5 Cross Validation"] = error.lasso
+
 
 c = coef(lasso.mod, s = bestlam)
 c
@@ -343,6 +355,7 @@ pls.cv <- crossval(pls.fit, segments = 10)
 plot(RMSEP(pls.cv), legendpos="topright")
 summary(pls.cv, what = "validation")
 
+
 ## Utilizamos 4 componentes por el Mínimo Error de VC
 pls.pred=predict(pls.fit,newdata=x[test,],ncomp=4)
 error.pls <- mean((pls.pred - datos.test[, "lbwght"])^2)
@@ -365,8 +378,6 @@ ncomp.perm
 pls.pred.3=predict(pls.fit,newdata=x[test,],ncomp=ncomp.perm)
 error.pls.perm <- mean((pls.pred.3 - datos.test[, "lbwght"])^2)
 error.pls.perm
-
-
 
 set.seed(100)
 pls.fit=plsr(lbwght~., data=datos,subset=train,scale=TRUE, validation="CV")
@@ -399,8 +410,6 @@ ncomp.perm
 pls.pred.3=predict(pls.fit,newdata=x[test,],ncomp=ncomp.perm)
 error.pls.perm <- mean((pls.pred.3 - datos.test[, "lbwght"])^2)
 error.pls.perm
-
-
 
 library(glmnet)
 library(caret)
@@ -464,5 +473,72 @@ error.lassoelastic <- mean((lre.pred - datos.test[, "lbwght"])^2)
 error.lassoelastic
 results2["LASSO with Elastic Net", "5 Cross Validation"] = error.lassoelastic
 
+library(biglasso)
+library(hdm)
+set.seed(100)
 
-kable(results2)
+# ajustamos los datos
+x = datos.train
+y = datos.train[, "lbwght"]
+x[, "lbwght"] <- NULL;
+
+
+lasso.reg.dep = rlasso(x = x, y = y, post=FALSE, X.dependent.lambda = TRUE) 
+
+sum.lasso.dep <- summary(lasso.reg.dep, all=FALSE)
+sum.lasso.dep
+yhat.lasso.dep.new = predict(lasso.reg.dep, newdata=datos.test) #out-of-sample prediction
+
+error.rlasso.dep <- mean((yhat.lasso.dep.new - datos.test[, "lbwght"] )^2)
+error.rlasso.dep
+
+results2["Rigorous LASSO Dependent L", "None"] = error.rlasso.dep
+
+set.seed(100)
+lasso.reg.ind = rlasso(x = x, y = y, post=FALSE) # use lasso, not-Post-lasso
+sum.lasso.ind <- summary(lasso.reg.ind, all=FALSE)
+sum.lasso.ind
+yhat.lasso.ind.new = predict(lasso.reg.ind, newdata=datos.test) #out-of-sample prediction
+
+
+error.rlasso.ind <- mean((yhat.lasso.ind.new - datos.test[, "lbwght"] )^2)
+error.rlasso.ind
+results2["Rigorous LASSO Independent L", "None"] = error.rlasso.ind
+
+set.seed(100)
+post.lasso.reg = rlasso(x = x, y = y, post=TRUE)
+sum.post.lasso.reg <- summary(post.lasso.reg, all=FALSE)
+sum.post.lasso.reg
+print(post.lasso.reg, all=FALSE) 
+yhat.postlasso.new = predict(post.lasso.reg, newdata=datos.test) 
+
+
+error.postlasso <- mean((yhat.postlasso.new - datos.test[, "lbwght"] )^2)
+error.postlasso
+results2["Rigorous LASSO Post-Lasso", "None"] = error.postlasso
+
+
+set.seed(100)
+lasso.effect = rlassoEffects(x = x, y = y)
+summary(lasso.effect)
+plot(lasso.effect)
+
+x.nuevo.1 <- x[, -c(1:6,8,10:11,14:20)] 
+
+lasso.effect.1 = rlassoEffects(x = x.nuevo.1, y = y)
+summary(lasso.effect.1)
+
+
+set.seed(100)
+lasso.reg.2 = rlasso(x = x.nuevo.1, y = y, post=FALSE)
+yhat.lasso.new.2 = predict(lasso.reg.2, newdata=datos.test) 
+error.rlasso.2 <- mean((yhat.lasso.new.2 - datos.test[, "lbwght"]  )^2)
+error.rlasso.2
+
+set.seed(100)
+post.lasso.reg.2 = rlasso(x = x.nuevo.1, y = y, post=TRUE) 
+summary(post.lasso.reg.2, all=FALSE) 
+yhat.postlasso.new.2 = predict(post.lasso.reg.2, newdata=datos.test) 
+error.postlasso.2 <- mean((yhat.postlasso.new.2 - datos.test[, "lbwght"] )^2)
+error.postlasso.2
+
