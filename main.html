@@ -1345,149 +1345,206 @@ error.lassoelastic</code></pre>
 <p>Ajusta un modelo Rigorous LASSO (RLASSO) sobre el conjunto de entrenamiento con el lambda elegido mediante la penalización dependiente de los datos</p>
 <pre><code>
 Call:
-rlasso.default(x = datos.train, y = datos.train[, &quot;lbwght&quot;], 
-    post = FALSE, X.dependent.lambda = TRUE)
+rlasso.default(x = x, y = y, post = FALSE, X.dependent.lambda = TRUE)
 
 Post-Lasso Estimation:  FALSE 
 
-Total number of variables: 21
+Total number of variables: 20
 Number of selected variables: 1 
 
 Residuals: 
-       Min         1Q     Median         3Q        Max 
--5.551e-15 -2.359e-16  5.204e-17  3.331e-16  1.221e-15 
+      Min        1Q    Median        3Q       Max 
+-1.070893  0.002102  0.011650  0.015554  0.016828 
 
             Estimate
-(Intercept)        0
-lbwght             1
+(Intercept)    7.154
+bwght          0.000
 
-Residual standard error: 5.55e-16
-Multiple R-squared:      1
-Adjusted R-squared:      1
+Residual standard error: 0.05398
+Multiple R-squared:  0.9205
+Adjusted R-squared:  0.9204
 Joint significance test:
  the sup score statistic for joint significance test is  3516 with a p-value of     0</code></pre>
 <pre><code>
 Call:
-rlasso.default(x = datos.train, y = datos.train[, &quot;lbwght&quot;], 
-    post = FALSE, X.dependent.lambda = TRUE)
+rlasso.default(x = x, y = y, post = FALSE, X.dependent.lambda = TRUE)
 
 Coefficients:
 (Intercept)         mage        meduc       monpre        npvis  
-  2.309e-14    0.000e+00    0.000e+00    0.000e+00    0.000e+00  
+  7.1543986    0.0000000    0.0000000    0.0000000    0.0000000  
        fage        feduc        bwght        omaps        fmaps  
-  0.000e+00    0.000e+00    0.000e+00    0.000e+00    0.000e+00  
+  0.0000000    0.0000000    0.0002827    0.0000000    0.0000000  
        cigs        drink          lbw         vlbw         male  
-  0.000e+00    0.000e+00    0.000e+00    0.000e+00    0.000e+00  
-      mwhte        mblck        fwhte        fblck       lbwght  
-  0.000e+00    0.000e+00    0.000e+00    0.000e+00    1.000e+00  
-     magesq      npvissq  
-  0.000e+00    0.000e+00  </code></pre>
+  0.0000000    0.0000000    0.0000000    0.0000000    0.0000000  
+      mwhte        mblck        fwhte        fblck       magesq  
+  0.0000000    0.0000000    0.0000000    0.0000000    0.0000000  
+    npvissq  
+  0.0000000  </code></pre>
 <p>Informa el error de prueba obtenido junto con el número de coeficientes estimados diferentes de cero.</p>
-<p>Total de variables = <strong>21</strong> Variables seleccionadas = <strong>1</strong> p-value = <strong>0</strong></p>
-<pre><code>[1] 4.253981e-31</code></pre>
-<p>El error de prueba de Rigorous Lasso con penalización dependiente de los datos es 4.253981310^{-31}</p>
+<p>Total de variables = <strong>20</strong> Variables seleccionadas = <strong>1</strong> p-value = <strong>0</strong></p>
+<pre><code>[1] 0.0009358474</code></pre>
+<p>El error de prueba de Rigorous Lasso con penalización dependiente de los datos es 9.358473810^{-4}</p>
 <p>Con el lambda elegido mediante la penalización independiente de los datos</p>
 <pre><code>
 Call:
-rlasso.default(x = datos.train, y = datos.train[, &quot;lbwght&quot;], 
-    post = FALSE)
+rlasso.default(x = x, y = y, post = FALSE)
 
 Post-Lasso Estimation:  FALSE 
 
-Total number of variables: 21
+Total number of variables: 20
 Number of selected variables: 1 
 
 Residuals: 
-       Min         1Q     Median         3Q        Max 
--5.551e-15 -2.359e-16  5.204e-17  3.331e-16  1.221e-15 
+      Min        1Q    Median        3Q       Max 
+-1.070893  0.002102  0.011650  0.015554  0.016828 
 
             Estimate
-(Intercept)        0
-lbwght             1
+(Intercept)    7.154
+bwght          0.000
 
-Residual standard error: 5.55e-16
-Multiple R-squared:      1
-Adjusted R-squared:      1
+Residual standard error: 0.05398
+Multiple R-squared:  0.9205
+Adjusted R-squared:  0.9204
 Joint significance test:
  the sup score statistic for joint significance test is  3516 with a p-value of     0</code></pre>
 <pre><code>
 Call:
-rlasso.default(x = datos.train, y = datos.train[, &quot;lbwght&quot;], 
-    post = FALSE)
+rlasso.default(x = x, y = y, post = FALSE)
 
 Coefficients:
 (Intercept)         mage        meduc       monpre        npvis  
-  2.309e-14    0.000e+00    0.000e+00    0.000e+00    0.000e+00  
+  7.1543986    0.0000000    0.0000000    0.0000000    0.0000000  
        fage        feduc        bwght        omaps        fmaps  
-  0.000e+00    0.000e+00    0.000e+00    0.000e+00    0.000e+00  
+  0.0000000    0.0000000    0.0002827    0.0000000    0.0000000  
        cigs        drink          lbw         vlbw         male  
-  0.000e+00    0.000e+00    0.000e+00    0.000e+00    0.000e+00  
-      mwhte        mblck        fwhte        fblck       lbwght  
-  0.000e+00    0.000e+00    0.000e+00    0.000e+00    1.000e+00  
-     magesq      npvissq  
-  0.000e+00    0.000e+00  </code></pre>
+  0.0000000    0.0000000    0.0000000    0.0000000    0.0000000  
+      mwhte        mblck        fwhte        fblck       magesq  
+  0.0000000    0.0000000    0.0000000    0.0000000    0.0000000  
+    npvissq  
+  0.0000000  </code></pre>
 <p>Informa el error de prueba obtenido junto con el número de coeficientes estimados diferentes de cero.</p>
-<p>Total de variables = <strong>21</strong> Variables seleccionadas = <strong>1</strong> p-value = <strong>0</strong></p>
-<pre><code>[1] 4.253981e-31</code></pre>
-<p>El error de prueba de Rigorous Lasso con penalización independiente de los datos es 4.253981310^{-31}</p>
+<p>Total de variables = <strong>20</strong> Variables seleccionadas = <strong>1</strong> p-value = <strong>0</strong></p>
+<pre><code>[1] 0.0009358474</code></pre>
+<p>El error de prueba de Rigorous Lasso con penalización independiente de los datos es 9.358473810^{-4}</p>
 <p>Calcula el error de prueba de los dos modelos mediante el ajuste de Post-LASSO.</p>
 <pre><code>
 Call:
-rlasso.default(x = datos.train, y = datos.train[, &quot;lbwght&quot;], 
-    post = TRUE)
+rlasso.default(x = x, y = y, post = TRUE)
 
 Post-Lasso Estimation:  TRUE 
 
-Total number of variables: 21
-Number of selected variables: 1 
+Total number of variables: 20
+Number of selected variables: 2 
 
 Residuals: 
-       Min         1Q     Median         3Q        Max 
--5.107e-15 -2.220e-16  4.684e-17  3.053e-16  1.166e-15 
+      Min        1Q    Median        3Q       Max 
+-0.726393 -0.003614  0.006465  0.011053  0.193903 
 
             Estimate
-(Intercept)        0
-lbwght             1
+(Intercept)    7.094
+bwght          0.000
+lbw           -0.293
 
-Residual standard error: 5.096e-16
-Multiple R-squared:      1
-Adjusted R-squared:      1
+Residual standard error: 0.03454
+Multiple R-squared:  0.9675
+Adjusted R-squared:  0.9674
 Joint significance test:
  the sup score statistic for joint significance test is  3516 with a p-value of     0</code></pre>
 <pre><code>
 Call:
-rlasso.default(x = datos.train, y = datos.train[, &quot;lbwght&quot;], 
-    post = TRUE)
+rlasso.default(x = x, y = y, post = TRUE)
 
 Coefficients:
 (Intercept)         mage        meduc       monpre        npvis  
-  2.132e-14    0.000e+00    0.000e+00    0.000e+00    0.000e+00  
+  7.0936376    0.0000000    0.0000000    0.0000000    0.0000000  
        fage        feduc        bwght        omaps        fmaps  
-  0.000e+00    0.000e+00    0.000e+00    0.000e+00    0.000e+00  
+  0.0000000    0.0000000    0.0003018    0.0000000    0.0000000  
        cigs        drink          lbw         vlbw         male  
-  0.000e+00    0.000e+00    0.000e+00    0.000e+00    0.000e+00  
-      mwhte        mblck        fwhte        fblck       lbwght  
-  0.000e+00    0.000e+00    0.000e+00    0.000e+00    1.000e+00  
-     magesq      npvissq  
-  0.000e+00    0.000e+00  </code></pre>
+  0.0000000    0.0000000   -0.2934100    0.0000000    0.0000000  
+      mwhte        mblck        fwhte        fblck       magesq  
+  0.0000000    0.0000000    0.0000000    0.0000000    0.0000000  
+    npvissq  
+  0.0000000  </code></pre>
 <pre><code>
 Call:
-rlasso.default(x = datos.train, y = datos.train[, &quot;lbwght&quot;], 
-    post = TRUE)
+rlasso.default(x = x, y = y, post = TRUE)
 
-(Intercept)       lbwght  
-  2.132e-14    1.000e+00  </code></pre>
+(Intercept)        bwght          lbw  
+  7.0936376    0.0003018   -0.2934100  </code></pre>
+<p>Informa el error de prueba obtenido junto con el número de coeficientes estimados diferentes de cero.</p>
+<p>Total de variables = <strong>20</strong> Variables seleccionadas = <strong>1</strong> p-value = <strong>0</strong></p>
+<pre><code>[1] 0.0005005301</code></pre>
+<p>El error de prueba Post-Lasso es 5.005300510^{-4}</p>
 </div>
-<div id="informa-el-error-de-prueba-obtenido-junto-con-el-numero-de-coeficientes-estimados-diferentes-de-cero." class="section level4">
-<h4>Informa el error de prueba obtenido junto con el número de coeficientes estimados diferentes de cero.</h4>
-<p>Total de variables = <strong>21</strong> Variables seleccionadas = <strong>1</strong> p-value = <strong>0</strong></p>
-<pre><code>[1] 3.113067e-31</code></pre>
-<p>El error de prueba Post-Lasso es 3.113066810^{-31}</p>
-<ol start="16" style="list-style-type: lower-alpha">
-<li><p>Para los dos modelos seleccionados en el apartado anterior (o.), contrasta la significaci´on individual de los coeficientes estimados del modelo final. Utiliza el nivel de significaci´on del 5%. Bas´andose en contrastes de significaci´on individual, selecciona modelos que contengan s´olo variables significativas al 5% de significaci´on y estima el error de prueba de estos modelos (mediante el ajuste de Post-LASSO).</p></li>
-<li><p>Haz una tabla que ense˜ne el nombre de cada modelo (con la Validaci´on Cruzada utilizada) y su error de prueba. ¿Hay mucha diferencia entre los errores de prueba resultantes de estos enfoques? ¿Cu´al es el modelo con el mejor ajuste? ¿Es el nuevo modelo m´as preciso que el mejor modelo del apartado f.?</p></li>
-<li><p>Haz una tabla con los coeficientes estimados con sus p-valores del modelo con el mejor ajuste. Comenta tus resultados. Interpreta los coeficientes estimados del modelo con el mejor ajuste.</p></li>
-</ol>
+<div id="p" class="section level4">
+<h4>p)</h4>
+<p>Contrastar la significación individual de los coeficientes estimados del modelo final. Utiliza el nivel de significación del 5%.</p>
+<pre><code>[1] &quot;Estimates and significance testing of the effect of target variables&quot;
+         Estimate. Std. Error t value Pr(&gt;|t|)    
+mage     3.843e-05  2.058e-03   0.019 0.985100    
+meduc    2.686e-04  6.252e-04   0.430 0.667424    
+monpre   1.284e-03  8.585e-04   1.495 0.134885    
+npvis   -2.455e-04  8.602e-04  -0.285 0.775333    
+fage     2.723e-04  2.544e-04   1.070 0.284482    
+feduc   -8.788e-04  5.669e-04  -1.550 0.121109    
+bwght    2.976e-04  1.583e-06 188.019  &lt; 2e-16 ***
+omaps   -9.043e-04  1.125e-03  -0.804 0.421432    
+fmaps    1.023e-02  2.644e-03   3.871 0.000108 ***
+cigs     4.469e-04  2.729e-04   1.638 0.101460    
+drink    7.396e-04  4.023e-03   0.184 0.854123    
+lbw     -1.380e-01  8.776e-03 -15.727  &lt; 2e-16 ***
+vlbw    -2.048e-01  1.159e-02 -17.672  &lt; 2e-16 ***
+male    -2.454e-03  2.057e-03  -1.193 0.232796    
+mwhte    2.616e-03  9.354e-03   0.280 0.779745    
+mblck   -5.379e-03  1.251e-02  -0.430 0.667106    
+fwhte   -7.936e-03  1.010e-02  -0.786 0.431914    
+fblck    6.145e-04  1.250e-02   0.049 0.960801    
+magesq   6.233e-06  3.356e-05   0.186 0.852649    
+npvissq -4.377e-05  2.683e-05  -1.632 0.102755    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+<p><img src="data:image/png;base64,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" width="672" /> Sólo las variables *<strong>bwght, fmaps, lbw y vlbw</strong> son significativas sobre un nivel de confianza del 1%</p>
+<p>Ahora eliminamos las variables no significativas</p>
+<pre><code>[1] &quot;Estimates and significance testing of the effect of target variables&quot;
+       Estimate. Std. Error t value Pr(&gt;|t|)    
+bwght  2.976e-04  1.583e-06 188.019  &lt; 2e-16 ***
+fmaps  1.058e-02  1.832e-03   5.775 7.68e-09 ***
+lbw   -1.541e-01  8.984e-03 -17.148  &lt; 2e-16 ***
+vlbw  -3.310e-01  1.448e-02 -22.861  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+<p>Las cuatro variables son muy significativas.</p>
+<p>Informa el error de prueba obtenido</p>
+<pre><code>[1] 0.0007593627</code></pre>
+<p>El error de prueba obtenido es 7.593626810^{-4}</p>
+<p>Basándose en contrastes de significación individual, selecciona modelos que contengan sólo variables significativas al 5% de significación y estima el error de prueba de estos modelos (mediante el ajuste de Post-LASSO).</p>
+<pre><code>
+Call:
+rlasso.default(x = x.nuevo.1, y = y, post = TRUE)
+
+Post-Lasso Estimation:  TRUE 
+
+Total number of variables: 4
+Number of selected variables: 4 
+
+Residuals: 
+      Min        1Q    Median        3Q       Max 
+-0.514608 -0.004064  0.005844  0.010699  0.261923 
+
+            Estimate
+(Intercept)    7.012
+bwght          0.000
+fmaps          0.011
+lbw           -0.154
+vlbw          -0.331
+
+Residual standard error: 0.02703
+Multiple R-squared:  0.9801
+Adjusted R-squared:   0.98
+Joint significance test:
+ the sup score statistic for joint significance test is  3516 with a p-value of     0</code></pre>
+<pre><code>[1] 0.000511914</code></pre>
+<p>El error de prueba de estos modelos es 5.119140210^{-4}</p>
 </div>
 <div id="q" class="section level4">
 <h4>q)</h4>
@@ -1497,6 +1554,7 @@ rlasso.default(x = datos.train, y = datos.train[, &quot;lbwght&quot;],
 <thead>
 <tr class="header">
 <th></th>
+<th align="right">None</th>
 <th align="right">5 Cross Validation</th>
 <th align="right">10 Cross Validation</th>
 </tr>
@@ -1504,28 +1562,51 @@ rlasso.default(x = datos.train, y = datos.train[, &quot;lbwght&quot;],
 <tbody>
 <tr class="odd">
 <td>RIDGE</td>
+<td align="right">NA</td>
 <td align="right">0.0005855</td>
 <td align="right">0.0005855</td>
 </tr>
 <tr class="even">
 <td>LASSO</td>
+<td align="right">NA</td>
 <td align="right">0.0004357</td>
 <td align="right">0.0004357</td>
 </tr>
 <tr class="odd">
 <td>PCA</td>
+<td align="right">NA</td>
 <td align="right">0.0005176</td>
 <td align="right">0.0005176</td>
 </tr>
 <tr class="even">
 <td>PLS</td>
+<td align="right">NA</td>
 <td align="right">0.0005496</td>
 <td align="right">0.0005496</td>
 </tr>
 <tr class="odd">
 <td>LASSO with Elastic Net</td>
+<td align="right">NA</td>
 <td align="right">0.0004959</td>
 <td align="right">0.0004796</td>
+</tr>
+<tr class="even">
+<td>Rigorous LASSO Independent L</td>
+<td align="right">0.0009358</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="odd">
+<td>Rigorous LASSO Dependent L</td>
+<td align="right">0.0009358</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+</tr>
+<tr class="even">
+<td>Rigorous LASSO Post-Lasso</td>
+<td align="right">0.0005005</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
 </tr>
 </tbody>
 </table>
